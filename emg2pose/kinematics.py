@@ -8,7 +8,7 @@
 import json
 import os
 from collections.abc import Callable
-from typing import Any, NamedTuple
+from typing import Any
 
 import torch
 
@@ -40,14 +40,11 @@ def load_hand_model_from_json(file_path: str) -> HandModel:
 
 
 class TorchNamedTuple(nn.Module):
-    def __init__(self, named_tuple: NamedTuple | Any, requires_grad: bool = True):
+    def __init__(self, named_tuple: Any, requires_grad: bool = True):
         """Represent a NamedTuple as a nn.Module (collection of nn.Parameters)
 
-        A note on the type signature: type checking for NamedTuples is pretty
-        unintuitive. Even if arguments are a proper subtype of NamedTuple, they will
-        still not be considered NamedTuples from a typing perspective.
-
-        Here, we use Union[NamedTuple, Any] to avoid these linting issues at the source.
+        Accept any named tuple of tensors. typing.NamedTuple is a factory, so it
+        cannot be used as a runtime type in a union on Python 3.12.
 
         Parameters
         ----------
